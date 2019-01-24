@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:tiles="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
+</head>
+<body>
+  <!-- react ver -->
+  <div id="root" ></div>
+  <script type="text/javascript" th:src="@{/built/index.bundle.js}"></script>
+
+  <!--thymeleaf ver -->
+<!--  <form action="/" method="post" enctype="multipart/form-data">
+    <div align="center">&lt;!&ndash; 받는 사람 이메일 &ndash;&gt;
+      <input type="text" name="customerEmail" size="120" style="width:100%" placeholder="작성자 이메일" class="form-control" >
+    </div>
+    <div align="center">&lt;!&ndash; 제목 &ndash;&gt;
+      <input type="text" name="subject" size="120" style="width:100%" placeholder="제목을 입력해주세요" class="form-control" >
+    </div>
+    <p>
+    <div align="center">&lt;!&ndash; 내용 &ndash;&gt;
+      <textarea name="text" cols="120" rows="12" style="width:100%; resize:none" placeholder="내용#" class="form-control"></textarea>
+    </div>
+    <p>
+    <div align="center">&lt;!&ndash; 내용 &ndash;&gt;
+      <input type="file" name="file" style="width:100%; resize:none" />
+    </div>
+    <div align="center">
+      <input type="submit" value="메일 보내기" class="btn btn-warning">
+    </div>
+  </form>
+  <div>
+    <ul>
+      <li th:each="file : ${files}">
+        <a th:href="${file}" th:text="${file}" />
+      </li>
+    </ul>
+  </div>-->
+</body>
+</html>

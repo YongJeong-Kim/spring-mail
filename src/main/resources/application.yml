@@ -1,0 +1,35 @@
+test:
+  mail:
+    to: # 받는사람
+
+spring:
+  mail:
+    protocol: smtp
+    # google : smtp.gmail.com
+    # naver : smtp.naver.com
+    # hiworks : smtps.hiworks.com
+    host:
+    # google, naver : 587
+    # hiworks : 465
+    port: 465
+    # google : xxx@gmail.com
+    # naver : xxx@naver.com
+    username:
+    password:
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          ssl:
+            # google, naver : false
+            # hiworks : true
+            enable: true
+  servlet:
+    multipart:
+      max-file-size: 2MB
+      max-request-size: 2MB
+  devtools:
+    livereload:
+      enabled: true
