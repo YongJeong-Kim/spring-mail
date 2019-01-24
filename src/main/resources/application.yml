@@ -1,6 +1,6 @@
 test:
   mail:
-    to: # 받는사람
+    to: # receive user
 
 spring:
   mail:
