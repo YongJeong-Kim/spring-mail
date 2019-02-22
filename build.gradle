@@ -24,6 +24,7 @@ repositories {
 }
 
 dependencies {
+  compile group: 'org.apache.commons', name: 'commons-email', version: '1.5'
   compile group: 'commons-io', name: 'commons-io', version: '2.6'
   implementation 'org.springframework.boot:spring-boot-starter-mail'
   implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
