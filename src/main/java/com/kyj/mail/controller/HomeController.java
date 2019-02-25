@@ -17,12 +17,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
-import javax.mail.Session;
+import javax.mail.*;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
@@ -64,9 +67,16 @@ public class HomeController {
     Session mailSession = Session.getDefaultInstance(new Properties(), null);
     InputStream source = new FileInputStream(emlFile);
     MimeMessage message = new MimeMessage(mailSession, source);
-
     MimeMessageParser parser = new MimeMessageParser(message);
     parser.parse();
+
+    Multipart multiPart = (Multipart) message.getContent();
+    for (int i = 0; i < multiPart.getCount(); i++) {
+      MimeBodyPart part = (MimeBodyPart) multiPart.getBodyPart(i);
+      if (Part.ATTACHMENT.equalsIgnoreCase(part.getDisposition())) {
+        System.out.println("attachment filename : " + part.getFileName());
+      }
+    }
 
     System.out.println("Subject : " + message.getSubject());
     System.out.println("From : " + message.getFrom()[0]);
@@ -83,5 +93,76 @@ public class HomeController {
       emailService.sendEmail(fileInfo, mailDTO);
     } else
       emailService.sendEmail(null, mailDTO);
+  }
+
+  private String receivingHost;
+  private String userName;
+  private String password;
+
+  @GetMapping("receive")
+  public @ResponseBody void receive() {
+    /*this will print subject of all messages in the inbox of sender@gmail.com*/
+
+    /* gmail imap.gmail.com
+     * hiworks pop3s.hiworks.com
+     * username abc@gmail.com etc.
+     * password mail account password
+     * */
+    this.receivingHost="pop3s.hiworks.com";//for imap protocol
+    this.userName = "kyj@pangaeasol.com";
+    this.password = "";
+    Properties props2 = System.getProperties();
+
+    /* gmail imaps
+     * hiworks pop3
+     * */
+    props2.setProperty("mail.store.protocol", "pop3");
+    // I used imaps protocol here
+
+    Session session2 = Session.getDefaultInstance(props2, null);
+
+    try {
+      /* gmail imaps
+      *  hiworks pop3
+      * */
+      Store store = session2.getStore("pop3");
+
+      store.connect(this.receivingHost, this.userName, this.password);
+
+      Folder folder = store.getFolder("INBOX");//get inbox
+
+      folder.open(Folder.READ_ONLY);//open folder only to read
+
+      Message message[]=folder.getMessages();
+      List<Message> list = Arrays.asList(message);
+      list.sort((l1, l2) -> {
+        try {
+          return l2.getSentDate().compareTo(l1.getSentDate());
+        } catch (MessagingException e) {
+          e.printStackTrace();
+        }
+        return 0;
+      });
+
+      list.forEach(l -> {
+        try {
+          System.out.println(l.getSentDate() + " : " + l.getSubject());
+        } catch (MessagingException e) {
+          e.printStackTrace();
+        }
+      });
+
+      for (int i = 0; i < message.length; i++){
+        //print subjects of all mails in the inbox
+        System.out.println(message[i].getSentDate() + " : " + message[i].getSubject());
+        //anything else you want
+      }
+
+      //close connections
+      folder.close(true);
+      store.close();
+    } catch (Exception e) {
+      System.out.println(e.toString());
+    }
   }
 }
